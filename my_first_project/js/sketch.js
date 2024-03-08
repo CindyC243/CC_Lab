@@ -19,8 +19,8 @@ let allowMouseInteraction = true; // Flag to control mouse interaction
 
 function setup() {
   let canvas = createCanvas(800, 500); // Create canvas
-  canvas.id("p5canvas") 
-  canvas.parent("p5Container") 
+  canvas.id("p5canvas")
+  canvas.parent("p5Container")
   buttonX = width / 2 - buttonWidth / 2; // Calculate button X-coordinate
   buttonY = height / 2 + 100 - buttonHeight / 2; // Calculate button Y-coordinate
   for (let i = 0; i < numPeas; i++) { // Initialize peas
