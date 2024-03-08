@@ -16,12 +16,11 @@ let buttonX; // X-coordinate of the start button
 let buttonY; // Y-coordinate of the start button
 let timeTextSize = 16; // Text size for time remaining
 let allowMouseInteraction = true; // Flag to control mouse interaction
-let highestScore = 0; // Variable to track the highest score
 
 function setup() {
   let canvas = createCanvas(800, 500); // Create canvas
-  canvas.id("p5canvas")
-  canvas.parent("p5Container")
+  canvas.id("p5canvas") 
+  canvas.parent("p5Container") 
   buttonX = width / 2 - buttonWidth / 2; // Calculate button X-coordinate
   buttonY = height / 2 + 100 - buttonHeight / 2; // Calculate button Y-coordinate
   for (let i = 0; i < numPeas; i++) { // Initialize peas
@@ -37,26 +36,26 @@ function draw() {
   drawBackground(); // Draw background
   
   if (!gameStarted) {
-  // Instruction Page
-  fill(255, 255, 0); // Set fill color to yellow
-  textSize(24);
-  textAlign(CENTER, CENTER);
-  text("Instructions:", width / 2, height / 2 - 100);
-  textSize(18);
-  text("1. Move your creature with the mouse.", width / 2, height / 2 - 50);
-  text("2. Eat yellow peas to grow. Avoid red peas.", width / 2, height / 2 - 20);
-  text("3. Survive as long as possible.", width / 2, height / 2 + 10);
-  text("GOAL: Eat 100 peas, REACH THE EARTH!", width / 2, height / 2 + 40);
-  // "Press to Start" button
-  stroke(255);
-  strokeWeight(1);
-  fill(0);
-  rect(buttonX, buttonY, buttonWidth, buttonHeight);
-  fill(255);
-  textSize(20);
-  textAlign(CENTER, CENTER);
-  text("Press to Start", width / 2, height / 2 + 100);
-} else {
+    // Instruction Page
+    fill(255);
+    textSize(24);
+    textAlign(CENTER, CENTER);
+    text("Instructions:", width / 2, height / 2 - 100);
+    textSize(18);
+    text("1. Move your creature with the mouse.", width / 2, height / 2 - 50);
+    text("2. Eat yellow peas to grow. Avoid red peas.", width / 2, height / 2 - 20);
+    text("3. Survive as long as possible.", width / 2, height / 2 + 10);
+    text("GOAL: Eat 100 peas, REACH THE EARTH!", width / 2, height / 2 + 40);
+    // "Press to Start" button
+    stroke(255);
+    strokeWeight(1);
+    fill(0);
+    rect(buttonX, buttonY, buttonWidth, buttonHeight);
+    fill(255);
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text("Press to Start", width / 2, height / 2 + 100);
+  } else {
     // Gameplay
     peas.forEach(pea => {
       movePea(pea);
@@ -76,10 +75,6 @@ function draw() {
       displayCreature(creature);
       if (!gameOver) {
         creature.peasEaten += eatPeas(creature); // Increment peas eaten by the amount returned
-        // Update highest score if applicable
-        if (creature.peasEaten > highestScore) {
-          highestScore = creature.peasEaten;
-        }
       }
       if (!userCreaturePresent && i === 0) {
         userCreaturePresent = true; // User's creature is now present on the canvas
@@ -142,8 +137,6 @@ function drawBackground() {
   angle += 0.02;
 }
 
-// Remaining code remains the same...
-
 function movePea(pea) {
   // Move the pea randomly
   pea.pos.x += random(-peaSpeed, peaSpeed);
@@ -172,13 +165,13 @@ function mousePressed() {
 
 function restartGame() {
   gameOver = false;
-  peas = [];
+  peas = []; // Reset the peas array
   creatures = [];
   timeRemaining = 20; // Reset time remaining
   gameStarted = false; // Reset game started flag
   userCreaturePresent = false; // Reset user's creature present flag
   allowMouseInteraction = true; // Re-enable mouse interaction
-  setup();
+  setup(); // Call the setup function to reinitialize the peas
 }
 
 function addCreature() {
@@ -261,25 +254,24 @@ function checkCollision(creature, index) {
   return false; // No collision
 }
 
-function showGameOver(congratulations) {
+function showGameOver() {
   background(0); // Set background color to black
   fill(255); // Set fill color to white
   textSize(32); // Set text size
   textAlign(CENTER, CENTER); // Set text alignment to center
-  
-  // Update highest score if applicable
-  for (let i = 0; i < creatures.length; i++) {
-    if (creatures[i].peasEaten > highestScore) {
-      highestScore = creatures[i].peasEaten;
-    }
-  }
 
-  if (congratulations) { // If the player reached the goal
-    text(`Congratulations!\nYou‘ve reached the Earth >:)\nPeas Eaten: ${highestScore}`, width / 2, height / 2);
-  } else { // If the player did not reach the goal
-    text(`Game Over\nPeas Eaten: ${highestScore}`, width / 2, height / 2);
-  }
+  text(`Game Over`, width / 2, height / 2 - 30);
+  text(`Peas Eaten: ${getTotalPeasEaten()}`, width / 2, height / 2 + 30);
 }
+
+function getTotalPeasEaten() {
+  let totalPeasEaten = 0;
+  for (let i = 0; i < creatures.length; i++) {
+    totalPeasEaten += creatures[i].peasEaten;
+  }
+  return totalPeasEaten;
+}
+
 
 function startTimer() { // Function to start the game timer
   gameStarted = true; // Set game started flag to true
