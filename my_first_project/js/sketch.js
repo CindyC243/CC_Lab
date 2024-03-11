@@ -1,30 +1,30 @@
 let peas = []; // Array to store peas
-let numPeas = 50; // Number of peas
-let creatures = []; // Array to store creatures
-let circleSize = 20; // Size of the creature's segments
-let rectSize = 20; // Size of the background rectangles
-let angle = 0; // Angle for background color variation
+let num = 50; // Number of peas
+let creature = []; // Array to store creature
+let segments = 20; // Size of the creature's segments
+let background_1 = 20; // Size of the background rectbackground_2s
+let background_2 = 0; // background_2 for background color variation
 let gameOver = false; // Flag to indicate if the game is over
 let gameStarted = false; // Flag to track if the game has started
-let userCreaturePresent = false; // Flag to track if the user's creature is present
-let maxSpeed = 5; // Maximum speed for creatures
+let user_creature = false; // Flag to track if the user's creature is present
+let maxSpeed = 5; // Maximum speed for creature
 let peaSpeed = 3; // Speed of peas
-let timeRemaining = 20; // Countdown timer in seconds
-let buttonWidth = 150; // Width of the start button
-let buttonHeight = 60; // Height of the start button
-let buttonX; // X-coordinate of the start button
-let buttonY; // Y-coordinate of the start button
-let timeTextSize = 16; // Text size for time remaining
-let allowMouseInteraction = true; // Flag to control mouse interaction
+let time_left = 20; // Countdown timer in seconds
+let b_width = 150; // Width of the start button
+let b_height = 60; // Height of the start button
+let X; // X-coordinate of the start button
+let Y; // Y-coordinate of the start button
+let time_text = 16; // Text size for time remaining
+let interaction = true; // Flag to control mouse interaction
 
 function setup() {
   let canvas = createCanvas(800, 500); // Create canvas
   canvas.id("p5canvas")
   canvas.parent("p5Container")
-  buttonX = width / 2 - buttonWidth / 2; // Calculate button X-coordinate
-  buttonY = height / 2 + 100 - buttonHeight / 2; // Calculate button Y-coordinate
-  for (let i = 0; i < numPeas; i++) { // Initialize peas
-    if (i < numPeas * 0.8) { // 80% of peas are yellow
+  X = width / 2 - b_width / 2; // Calculate button X-coordinate
+  Y = height / 2 + 100 - b_height / 2; // Calculate button Y-coordinate
+  for (let i = 0; i < num; i++) { // Initialize peas
+    if (i < num * 0.8) { // 80% of peas are yellow
       peas.push({ pos: createVector(random(width), random(height)), color: color(255, 255, 0) });
     } else { // 20% of peas are red
       peas.push({ pos: createVector(random(width), random(height)), color: color(255, 0, 0) });
@@ -50,7 +50,7 @@ function draw() {
     stroke(255);
     strokeWeight(1);
     fill(0);
-    rect(buttonX, buttonY, buttonWidth, buttonHeight);
+    rect(X, Y, b_width, b_height);
     fill(255);
     textSize(20);
     textAlign(CENTER, CENTER);
@@ -63,56 +63,56 @@ function draw() {
       ellipse(pea.pos.x, pea.pos.y, 10, 10);
     });
 
-    if (creatures.length > 0 && !gameOver) {
-      moveCreatureWithMouse(creatures[0]);
+    if (creature.length > 0 && !gameOver) {
+      movement(creature[0]);
     }
 
-    for (let i = creatures.length - 1; i >= 0; i--) {
-      let creature = creatures[i];
+    for (let i = creature.length - 1; i >= 0; i--) {
+      let c_creature = creature[i]; // Rename to avoid conflict
       if (i > 0 && !gameOver) {
-        moveCreature(creature);
+       move_creature(c_creature);
       }
-      displayCreature(creature);
+      displayCreature(c_creature);
       if (!gameOver) {
-        creature.peasEaten += eatPeas(creature); // Increment peas eaten by the amount returned
+        c_creature.peasEaten += eat_peas(c_creature); // Increment peas eaten by the amount returned
       }
-      if (!userCreaturePresent && i === 0) {
-        userCreaturePresent = true; // User's creature is now present on the canvas
+      if (!user_creature && i === 0) {
+        user_creature = true; // User's creature is now present on the canvas
         startTimer();
-        allowMouseInteraction = false; // Disable further mouse interaction
+        interaction = false; // Disable further mouse interaction
       }
-      if (checkCollision(creature, i)) {
+      if (collision(c_creature, i)) {
         gameOver = true;
       }
     }
 
     if (gameOver) {
-      showGameOver();
+     gameover_pre();
     } else {
       // Display time remaining
       fill(255);
-      textSize(timeTextSize);
+      textSize(time_text);
       textAlign(LEFT, TOP);
-      text(`Time Remaining: ${timeRemaining}`, 10, 20);
+      text(`Time Remaining: ${time_left}`, 10, 20);
 
       // Display pea counter for each creature
       textAlign(RIGHT, TOP);
-      for (let i = 0; i < creatures.length; i++) {
+      for (let i = 0; i < creature.length; i++) {
         let yPosition = 20 * (i + 1);
-        text(`Peas Eaten: ${creatures[i].peasEaten}`, width - 10, yPosition);
+        text(`Peas Eaten: ${creature[i].peasEaten}`, width - 10, yPosition);
       }
     }
 
     // Decrement time remaining
-    if (frameCount % 60 === 0 && timeRemaining > 0) {
-      timeRemaining--;
-      if (timeRemaining === 0) {
-        if (creatures.some(creature => creature.peasEaten >= 100)) {
+    if (frameCount % 60 === 0 && time_left > 0) {
+      time_left--;
+      if (time_left === 0) {
+        if (creature.some(creature => creature.peasEaten >= 100)) {
           gameOver = true;
-          showGameOver(true); // Display congratulations message
+         gameover_pre(true); // Display congratulations message
         } else {
           gameOver = true;
-          showGameOver(false); // Display regular game over message
+         gameover_pre(false); // Display regular game over message
         }
       }
     }
@@ -121,20 +121,20 @@ function draw() {
 
 function drawBackground() {
   // Background
-  for (let y = 0; y < height; y += rectSize) {
-    for (let x = 0; x < width; x += rectSize) {
+  for (let y = 0; y < height; y += background_1) {
+    for (let x = 0; x < width; x += background_1) {
       let c = color(
-        100 + sin(angle + x * 0.01 + y * 0.01) * 100,
-        100 + sin(angle + x * 0.01 + y * 0.01) * 50,
-        150 + cos(angle + x * 0.01 + y * 0.01) * 100
+        100 + sin(background_2 + x * 0.01 + y * 0.01) * 100,
+        100 + sin(background_2 + x * 0.01 + y * 0.01) * 50,
+        150 + cos(background_2 + x * 0.01 + y * 0.01) * 100
       );
       fill(c);
       noStroke();
-      triangle(x, y, x + rectSize, y, x, y + rectSize);
-      triangle(x + rectSize, y, x + rectSize, y + rectSize, x, y + rectSize);
+      triangle(x, y, x + background_1, y, x, y + background_1);
+      triangle(x + background_1, y, x + background_1, y + background_1, x, y + background_1);
     }
   }
-  angle += 0.02;
+  background_2 += 0.02;
 }
 
 function movePea(pea) {
@@ -147,8 +147,8 @@ function movePea(pea) {
 }
 
 function mousePressed() {
-  if (!gameStarted && allowMouseInteraction) {
-    if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
+  if (!gameStarted && interaction) {
+    if (mouseX > X && mouseX < X + b_width && mouseY > Y && mouseY < Y + b_height) {
       gameStarted = true;
       // Create the user's creature
       addCreature();
@@ -157,7 +157,7 @@ function mousePressed() {
     if (gameOver) {
       restartGame();
     } else {
-      // Don't create creatures if the game is not over
+      // Don't create creature if the game is not over
       // addCreature();
     }
   }
@@ -166,11 +166,11 @@ function mousePressed() {
 function restartGame() {
   gameOver = false;
   peas = []; // Reset the peas array
-  creatures = [];
-  timeRemaining = 20; // Reset time remaining
+  creature = [];
+  time_left = 20; // Reset time remaining
   gameStarted = false; // Reset game started flag
-  userCreaturePresent = false; // Reset user's creature present flag
-  allowMouseInteraction = true; // Re-enable mouse interaction
+  user_creature = false; // Reset user's creature present flag
+  interaction = true; // Re-enable mouse interaction
   setup(); // Call the setup function to reinitialize the peas
 }
 
@@ -180,58 +180,58 @@ function addCreature() {
   let segments = [{ pos: createVector(x, y), col: color(random(255), random(255), random(255)) }];
   let xSpeed = random(-maxSpeed, maxSpeed); // Random x-speed
   let ySpeed = random(-maxSpeed, maxSpeed); // Random y-speed
-  creatures.push({ x, y, xSpeed, ySpeed, segments, initialSegments: 1, peasEaten: 0 });
+  creature.push({ x, y, xSpeed, ySpeed, segments, initialSegments: 1, peasEaten: 0 });
 }
 
-function moveCreature(creature) {
-  creature.x += creature.xSpeed;
-  creature.y += creature.ySpeed;
+function move_creature(c_creature) {
+  c_creature.x += c_creature.xSpeed;
+  c_creature.y += c_creature.ySpeed;
 
-  if (creature.x < 0 || creature.x > width) creature.xSpeed *= -1;
-  if (creature.y < 0 || creature.y > height) creature.ySpeed *= -1;
+  if (c_creature.x < 0 || c_creature.x > width) c_creature.xSpeed *= -1;
+  if (c_creature.y < 0 || c_creature.y > height) c_creature.ySpeed *= -1;
 
-  updateCreaturePosition(creature);
+  update_pos(c_creature);
 }
 
-function moveCreatureWithMouse(creature) {
-  creature.x = mouseX;
-  creature.y = mouseY;
-  updateCreaturePosition(creature);
+function movement(c_creature) {
+  c_creature.x = mouseX;
+  c_creature.y = mouseY;
+  update_pos(c_creature);
 }
 
-function updateCreaturePosition(creature) {
-  let newHeadColor = color(random(255), random(255), random(255));
-  creature.segments.unshift({ pos: createVector(creature.x, creature.y), col: newHeadColor });
-  if (creature.segments.length > creature.initialSegments) {
-    creature.segments.pop();
+function update_pos(c_creature) {
+  let head_color = color(random(255), random(255), random(255));
+  c_creature.segments.unshift({ pos: createVector(c_creature.x, c_creature.y), col: head_color });
+  if (c_creature.segments.length > c_creature.initialSegments) {
+    c_creature.segments.pop();
   }
 }
 
-function displayCreature(creature) {
-  creature.segments.forEach(segment => {
+function displayCreature(c_creature) {
+  c_creature.segments.forEach(segment => {
     fill(segment.col);
-    ellipse(segment.pos.x, segment.pos.y, circleSize, circleSize);
+    ellipse(segment.pos.x, segment.pos.y, segments, segments);
   });
 
   // Draw face on the first segment
-  let firstSegment = creature.segments[0];
+  let seg_1 = c_creature.segments[0];
   fill(255); // White
-  ellipse(firstSegment.pos.x - 7, firstSegment.pos.y - 7, 8, 8); // Left eye
-  ellipse(firstSegment.pos.x + 7, firstSegment.pos.y - 7, 8, 8); // Right eye
+  ellipse(seg_1.pos.x - 7, seg_1.pos.y - 7, 8, 8); // Left eye
+  ellipse(seg_1.pos.x + 7, seg_1.pos.y - 7, 8, 8); // Right eye
   fill(0); // Black
-  ellipse(firstSegment.pos.x - 7, firstSegment.pos.y - 7, 4, 4); // Left pupil
-  ellipse(firstSegment.pos.x + 7, firstSegment.pos.y - 7, 4, 4); // Right pupil
+  ellipse(seg_1.pos.x - 7, seg_1.pos.y - 7, 4, 4); // Left pupil
+  ellipse(seg_1.pos.x + 7, seg_1.pos.y - 7, 4, 4); // Right pupil
   fill(255, 0, 0); // Red
-  ellipse(firstSegment.pos.x, firstSegment.pos.y + 4, 12, 6); // Mouth
+  ellipse(seg_1.pos.x, seg_1.pos.y + 4, 12, 6); // Mouth
 }
 
-function eatPeas(creature) {
-  let peasEaten = 0; // Variable to track peas eaten by this creature
+function eat_peas(c_creature) {
+  let peasEaten = 0; // Variable to track peas eaten by this c_creature
   for (let i = peas.length - 1; i >= 0; i--) {
-    if (dist(creature.x, creature.y, peas[i].pos.x, peas[i].pos.y) < circleSize / 2 + 5) {
+    if (dist(c_creature.x, c_creature.y, peas[i].pos.x, peas[i].pos.y) < segments / 2 + 5) {
       if (peas[i].color.levels[1] === 255) { // If the pea is yellow
         peas.splice(i, 1);
-        creature.initialSegments++;
+        c_creature.initialSegments++;
         peasEaten++;
         peas.push({ pos: createVector(random(width), random(height)), color: color(255, 255, 0) });
       } else { // If the pea is red
@@ -239,14 +239,14 @@ function eatPeas(creature) {
       }
     }
   }
-  return peasEaten; // Return the number of peas eaten by this creature
+  return peasEaten; // Return the number of peas eaten by this c_creature
 }
 
-function checkCollision(creature, index) {
-  for (let i = 0; i < creatures.length; i++) {
+function collision(c_creature, index) {
+  for (let i = 0; i < creature.length; i++) {
     if (i !== index) {
-      let other = creatures[i];
-      if (dist(creature.x, creature.y, other.x, other.y) < circleSize) {
+      let other = creature[i];
+      if (dist(c_creature.x, c_creature.y, other.x, other.y) < segments) {
         return true; // Collision detected
       }
     }
@@ -254,7 +254,7 @@ function checkCollision(creature, index) {
   return false; // No collision
 }
 
-function showGameOver() {
+function gameover_pre() {
   background(0); // Set background color to black
   fill(255); // Set fill color to white
   textSize(32); // Set text size
@@ -266,13 +266,15 @@ function showGameOver() {
 
 function getTotalPeasEaten() {
   let totalPeasEaten = 0;
-  for (let i = 0; i < creatures.length; i++) {
-    totalPeasEaten += creatures[i].peasEaten;
+  for (let i = 0; i < creature.length; i++) {
+    totalPeasEaten += creature[i].peasEaten;
   }
   return totalPeasEaten;
 }
 
-
 function startTimer() { // Function to start the game timer
   gameStarted = true; // Set game started flag to true
 }
+
+
+
