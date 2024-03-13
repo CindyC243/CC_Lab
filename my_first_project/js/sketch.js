@@ -224,20 +224,23 @@ function eat_peas(c_creature) {
         gameOver = true;
       }
     }
+
+    if (collision(c_creature, i)) {
+      gameOver = true;
+    }
   }
   return peasEaten;
 }
 
 function collision(c_creature, index) {
-  for (let i = 0; i < creature.length; i++) {
-    if (i !== index) {
-      let other = creature[i];
-      if (dist(c_creature.x, c_creature.y, other.x, other.y) < segments) {
-        return true;
-      }
+  for (let i = 0; i < peas.length; i++) {
+    let pea = peas[i];
+    let d = dist(c_creature.x, c_creature.y, pea.pos.x, pea.pos.y);
+    if (d < segments / 2 + 5 && pea.color.levels[1] !== 255) {
+      return true; // Collision detected with a red pea
     }
   }
-  return false;
+  return false; // No collision detected
 }
 
 function gameover_pre() {
