@@ -1,0 +1,88 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  background-image: url('../assests/header.png'); 
+  background-color:none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  text-align: center;
+  padding: 50px 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.navbar a {
+  color: white;
+  margin: 0 20px;
+  text-decoration: none;
+  padding: 14px 25px;
+  text-align: center;
+  display: inline-block;
+}
+
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.main-content {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2em;
+  margin-bottom: 0;
+}
+
+.date {
+  font-style: italic;
+  color: #555;
+  margin-top: 5px;
+}
+
+.post-content {
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: left;
+}
+
+.post-content p {
+  color: #333;
+}
+
+.post-content a {
+  color: #0066cc;
+  text-decoration: none;
+  display: block;
+  margin: 10px 0;
+}
+
+.post-content a:hover {
+  text-decoration: underline;
+}
+
+.question {
+  font-weight: bold;
+  margin-top: 40px;
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
