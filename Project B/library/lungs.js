@@ -1,107 +1,109 @@
-let lungImg, darkLungImg;
-let cigaretteImg, pillImg;
-let cigarette, pill;
-let draggedObject = null;
-let showDarkLung = false;
-let darkLungOpacity = 255;
+let lungImg, cigaretteImg, pillImg, boneImg;
+let lungX, lungY; // Dynamic centering of the lung image, with adjustment
+let lungScale = 1; // Starting scale for the lung image
+let cigaretteX = 100, cigaretteY = 100;
+let pillX = 600, pillY = 100;
+let boneX, boneY, boneScale = 1;
+let showBone = true; // Initially, the bone image is visible
+let draggingItem = null;
+let clickable = true;
+let damageSpots = []; // Array to hold damage spots
 
 function preload() {
-  lungImg = loadImage('assests/lung.png');
-  darkLungImg = loadImage('assests/dark_lung.png');
-  cigaretteImg = loadImage('assests/cigarette.png');
-  pillImg = loadImage('assests/pill.png');
-  zoomImg = loadImage('assests/zoom.png');
+  lungImg = loadImage('assets/lung.png');
+  cigaretteImg = loadImage('assets/cigarette.png');
+  pillImg = loadImage('assets/pill.png');
+  boneImg = loadImage('assets/bone.png');
+  darkImg = loadImage('assets/dark_lung.png');
 }
 
 function setup() {
-  pillImg.resize(0, 50)
-  cigaretteImg.resize(0,50)
-  image(darkLungImg,0,0)
   createCanvas(800, 600);
-  cigarette = new Draggable(100, 100, cigaretteImg.width, cigaretteImg.height, cigaretteImg);
-  pill = new Draggable(200, 100, pillImg.width, pillImg.height, pillImg);
+  pillImg.resize(0, 50);
+  cigaretteImg.resize(0, 50);
+
+  // Center lung initially, then move slightly to the left
+  lungX = width / 2 - 4;
+  lungY = height / 2;
+
+  boneX = (width - (boneImg.width * boneScale)) / 2 - 50;
+  boneY = (height - (boneImg.height * boneScale)) / 2;
 }
 
 function draw() {
   background(255);
+  imageMode(CENTER);
+  image(lungImg, lungX, lungY, lungImg.width * lungScale, lungImg.height * lungScale);
+  imageMode(CORNER);
 
-  if (showDarkLung) {
-    // 居中显示缩放后的肺部图片
-    let lungWidth = lungImg.width * 1.5;
-    let lungHeight = lungImg.height * 1.5;
-    let lungX = (width - lungWidth) / 2;
-    let lungY = (height - lungHeight) / 2;
+  // Drawing damage spots
+  fill(0, 0, 0, 100); // Semi-transparent black
+  noStroke();
+  damageSpots.forEach(spot => {
+    ellipse(spot.x, spot.y, 20, 20); // Draw an ellipse at each damage spot
+  });
 
-    // 绘制正常的肺部图片
-    image(lungImg, lungX, lungY, lungWidth, lungHeight);
-
-    // 绘制染黑的肺部图片,并设置透明度
-    tint(255, darkLungOpacity);
-    image(darkLungImg, lungX, lungY, lungWidth, lungHeight);
-    noTint();
-  } else {
-    // 绘制干净的肺部图片
-    image(lungImg, (width - lungImg.width) / 2, (height - lungImg.height) / 2);
+  if (showBone) {
+    tint(255, 150);
+    image(boneImg, boneX, boneY, boneImg.width * boneScale, boneImg.height * boneScale);
   }
 
-  // 绘制香烟和药丸
-  cigarette.display();
-  pill.display();
+  noTint();
 
-  // 检查是否有对象被拖动
-  if (draggedObject) {
-    draggedObject.drag();
+  if (lungScale >= 1.5) {
+    image(cigaretteImg, cigaretteX, cigaretteY);
+    image(pillImg, pillX, pillY);
+  }
 
-    // 检查对象是否在肺部上
-    if (draggedObject.isOver((width - lungImg.width * 1.5) / 2, (height - lungImg.height * 1.5) / 2, lungImg.width * 1.5, lungImg.height * 1.5)) {
-      if (draggedObject === cigarette) {
-        // 让肺部变得更黑
-        darkLungOpacity = min(darkLungOpacity + 5, 255);
-      } else if (draggedObject === pill) {
-        // 让肺部变亮
-        darkLungOpacity = max(darkLungOpacity - 5, 0);
-      }
+  clickable = lungScale < 1.5;
+}
+
+function mousePressed() {
+  if (showBone) {
+    showBone = false;
+  }
+
+  if (clickable && dist(mouseX, mouseY, lungX, lungY) < lungImg.width * lungScale / 2) {
+    lungScale = Math.min(lungScale + 0.1, 1.5);
+  }
+
+  if (lungScale >= 1.5) {
+    if (dist(mouseX, mouseY, cigaretteX, cigaretteY) < 50) {
+      draggingItem = 'cigarette';
+    } else if (dist(mouseX, mouseY, pillX, pillY) < 50) {
+      draggingItem = 'pill';
     }
   }
 }
 
-function mousePressed() {
-  if (cigarette.isOver(mouseX, mouseY)) {
-    draggedObject = cigarette;
-  } else if (pill.isOver(mouseX, mouseY)) {
-    draggedObject = pill;
-  } else if (mouseX > (width - lungImg.width) / 2 && mouseX < (width + lungImg.width) / 2 && mouseY > (height - lungImg.height) / 2 && mouseY < (height + lungImg.height) / 2) {
-    // 如果点击了肺部图片,切换到缩放后的肺部图片
-    showDarkLung = true;
-    darkLungOpacity = 255;
+function mouseDragged() {
+  if (draggingItem === 'cigarette') {
+    cigaretteX = mouseX;
+    cigaretteY = mouseY;
+    
+    // Check if the pixel under the cigarette is part of the lung
+    if (dist(mouseX, mouseY, lungX, lungY) < lungImg.width * lungScale / 2) {
+      // Convert canvas coordinates to image coordinates
+      let imgX = Math.floor((mouseX - lungX + (lungImg.width * lungScale / 2)) / lungScale);
+      let imgY = Math.floor((mouseY - lungY + (lungImg.height * lungScale / 2)) / lungScale);
+
+      lungImg.loadPixels();
+      let index = (imgY * lungImg.width + imgX) * 4;
+      
+      // Check if the pixel alpha value is not zero
+      if (lungImg.pixels[index + 3] > 0) {
+        // Add damage spot if the pixel is part of the lung
+        damageSpots.push({x: mouseX, y: mouseY});
+      }
+    }
+  } else if (draggingItem === 'pill') {
+    pillX = mouseX;
+    pillY = mouseY;
+    // Check for collision with existing damage spots and remove them
+    damageSpots = damageSpots.filter(spot => dist(mouseX, mouseY, spot.x, spot.y) > 20);
   }
 }
 
 function mouseReleased() {
-  draggedObject = null;
-}
-
-class Draggable {
-  constructor(x, y, w, h, img) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.img = img;
-  }
-
-  display() {
-    // 绘制对象(香烟或药丸)
-    image(this.img, this.x, this.y);
-  }
-
-  isOver(x, y, w, h) {
-    return mouseX > x && mouseX < x + w && 
-           mouseY > y && mouseY < y + h;
-  }
-
-  drag() {
-    this.x = mouseX - this.w / 2;
-    this.y = mouseY - this.h / 2;
-  }
+  draggingItem = null;
 }

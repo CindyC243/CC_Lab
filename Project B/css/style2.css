@@ -5,7 +5,7 @@ body, html {
 }
 
 .header {
-  background-image: url('../assests/header.png'); 
+  background-image: url('../assets/header.png'); 
   background-color:none;
   background-repeat: no-repeat;
   background-size: cover;
@@ -35,7 +35,7 @@ body, html {
 }
 
 .main-content {
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   padding: 20px;
   text-align: center;
 }
@@ -85,4 +85,34 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+}
+
+#stats{
+  width:100%;
+  height:100%;
+}
+
+#prestats{
+  width:100%;
+  height:100%;
+}
+
+.person1{
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#anne{
+  width:20%;
+  height:20%;
+}
+
+.person2{
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#brandon{
+  width:20%;
+  height:20%;
 }
