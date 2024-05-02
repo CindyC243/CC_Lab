@@ -86,4 +86,18 @@ body, html {
     bottom: 0;
     width: 100%;
   }
+
+  #procig1{
+    width:80%;
+    height:40%;
+  }
+
+  #procig2{
+    width:80%;
+    height:80%;
+  }
   
+  .question {
+    font-weight: bold;
+    margin-top: 40px;
+  }
