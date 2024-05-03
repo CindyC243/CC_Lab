@@ -7,9 +7,9 @@ html, body {
 }
 
 .header {
-  width: 100%; /* Ensures it takes the full width */
+  width: 100%; 
   background-image: url('../assets/header.png');
-  background-color: #333; /* Fallback color */
+  background-color: #333; 
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
@@ -36,13 +36,13 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centers vertically in the viewport */
-  align-items: center; /* Centers horizontally in the viewport */
-  height: 100vh; /* Full viewport height */
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
   margin: 0;
   padding: 0;
-  width: 100%; /* Full width */
-  background-color: black; /* Or your preferred background color */
+  width: 100%; 
+  background-color: black; 
 }
 
 

@@ -13,7 +13,7 @@ let maxSpotSize = 50; // Maximum size for the spot
 let backButton;
 
 let breathDirection = 1; // Variable to control the direction of breathing
-let breathSpeed = 0.005; // Speed at which the lung breathes
+let breathSpeed = 0.003; // Speed at which the lung breathes
 
 function preload() {
   lungImg = loadImage('assets/lung.png');
@@ -61,10 +61,12 @@ function draw() {
     breathDirection *= -1;
   }
   
-  // Draw lung image with dynamic scale
+  // Draw lung image with dynamic scale and dark tint
+  tint(150); // Apply a dark tint
   imageMode(CENTER);
   image(lungImg, lungX, lungY, lungImg.width * lungScale, lungImg.height * lungScale);
   imageMode(CORNER);
+  noTint(); // Reset tint
 
   // Drawing damage spots
   fill(0, 0, 0, 100); // Semi-transparent black

@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh; 
+    background-color: black;
+}
+
+h1 {
+    font-size: 80px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+#bgp {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+#title {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#p5-canvas-container {
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    top: 510px;
+    left: 42%;
+}
+
+#demo {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    z-index: 1;
+}
+.arrow-button {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: rgb(53, 1, 53);
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.arrow-button:hover {
+    background-color: rgb(159, 27, 159);
+}
+
+
