@@ -34,11 +34,10 @@ function setup() {
   textSize(30);
   text("Click On The Age Group You Want To Explore", width / 2, 50);
 
-  // Center and display black lung image
-  let blacklungWidth = 200; // adjust based on image size
-  let blacklungHeight = 200; // adjust based on image size
+  let blacklungWidth = 200; 
+  let blacklungHeight = 200; 
   let blacklungX = width / 2 - blacklungWidth / 2;
-  let blacklungY = 100; // adjust based on desired vertical position
+  let blacklungY = 100; 
   image(blacklung, blacklungX, blacklungY, blacklungWidth, blacklungHeight);
 }
 
