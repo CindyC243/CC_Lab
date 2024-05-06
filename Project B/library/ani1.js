@@ -16,6 +16,8 @@ function setup() {
   let margin = 50;
   let totalWidth = 3 * imgWidth + 2 * margin;
 
+  //hi
+
   let startX = (width - totalWidth) / 2;
   let startY = height - imgHeight - margin;
 
