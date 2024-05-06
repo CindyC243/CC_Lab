@@ -10,7 +10,7 @@ function draw() {
   background(0);
 
   for (let i = 0; i < 3; i++) {
-    let x = width / 2 + random(-50, 50); 
+    let x = width / 2 + random(-50, 50);
     particles.push(new Particle(x, height));
   }
 
@@ -27,19 +27,19 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.vy = random(-1, -3); 
+    this.vy = random(-1, -3);
     this.alpha = 255;
     this.size = random(10, 20);
     this.hue = 0;
-    this.initialX = x; 
+    this.initialX = x;
   }
 
   update() {
     this.y += this.vy;
-    this.vy *= 0.99; 
-    this.alpha -= 2; 
-    this.size += 0.1; 
-    this.hue += 0.5; 
+    this.vy *= 0.99;
+    this.alpha -= 2;
+    this.size += 0.1;
+    this.hue += 0.5;
     this.x = lerp(this.initialX, width / 2, map(this.alpha, 255, 0, 0, 1));
   }
 
