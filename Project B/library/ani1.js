@@ -1,36 +1,45 @@
-let teenSmokeImg, adultImg, elderSmokeImg;
+let teenSmokeImg, adultImg, elderSmokeImg, blacklung;
 
 function preload() {
   teenSmokeImg = loadImage('assets/teensmoke.png');
   adultImg = loadImage('assets/adultsmoke.png');
   elderSmokeImg = loadImage('assets/eldersmoke.png');
+  blacklung = loadImage('assets/darklung.png');
+  normallung = loadImage('assets/lung.png')
 }
 
 function setup() {
-  createCanvas(800, 600); 
+  createCanvas(800, 600);
 
   let imgWidth = 200;
   let imgHeight = 200;
-  let margin = 50; 
-  let totalWidth = 3 * imgWidth + 2 * margin; 
+  let margin = 50;
+  let totalWidth = 3 * imgWidth + 2 * margin;
 
-  let startX = (width - totalWidth) / 2; 
-  let startY = height - imgHeight - margin; 
+  let startX = (width - totalWidth) / 2;
+  let startY = height - imgHeight - margin;
 
   image(teenSmokeImg, startX, startY, imgWidth, imgHeight);
   image(adultImg, startX + imgWidth + margin, startY, imgWidth, imgHeight);
   image(elderSmokeImg, startX + 2 * (imgWidth + margin), startY, imgWidth, imgHeight);
 
- 
   textAlign(CENTER, CENTER);
   textSize(14);
   fill(255);
   text("Teens: 3 years of smoking", startX + imgWidth / 2, startY - 30);
   text("Adult: 20 years of smoking", startX + imgWidth + margin + imgWidth / 2, startY - 30);
   text("Elder: 60 years of smoking", startX + 2 * (imgWidth + margin) + imgWidth / 2, startY - 30);
+  text("Normal?", startX + imgWidth + margin + imgWidth / 2, startY - 270);
 
   textSize(30);
   text("Click On The Age Group You Want To Explore", width / 2, 50);
+
+  // Center and display black lung image
+  let blacklungWidth = 200; // adjust based on image size
+  let blacklungHeight = 200; // adjust based on image size
+  let blacklungX = width / 2 - blacklungWidth / 2;
+  let blacklungY = 100; // adjust based on desired vertical position
+  image(blacklung, blacklungX, blacklungY, blacklungWidth, blacklungHeight);
 }
 
 function mousePressed() {
@@ -40,7 +49,7 @@ function mousePressed() {
   let startX = (width - 3 * imgWidth - 2 * margin) / 2;
   let startY = height - imgHeight - margin;
 
-  
+
   if (mouseX >= startX && mouseX <= startX + imgWidth && mouseY >= startY && mouseY <= startY + imgHeight) {
     window.location.href = "animation2.html";
   }
@@ -52,5 +61,5 @@ function mousePressed() {
   if (mouseX >= startX + 2 * (imgWidth + margin) && mouseX <= startX + 3 * (imgWidth + margin) && mouseY >= startY && mouseY <= startY + imgHeight) {
     window.location.href = "animation4.html";
   }
-  
+
 }
